@@ -54,5 +54,5 @@ Przydatne funckje:
 ```python
 ob.describe() # statystyki
 ob.apply(lambda x: (x - np.mean(x)) / (np.max(x) - np.min(x))) # normalizacja danych
-
+ob.info() # pisze ile missingów
 ```
