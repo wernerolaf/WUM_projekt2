@@ -52,6 +52,7 @@ Chapter 1 : All the nonsense with learning pytongue all over again
 Przydatne funckje:
 
 ```python
-ob.describe()
+ob.describe() # statystyki
+ob.apply(lambda x: (x - np.mean(x)) / (np.max(x) - np.min(x))) # normalizacja danych
 
 ```
