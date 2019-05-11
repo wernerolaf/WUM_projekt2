@@ -22,5 +22,5 @@ po = read_excel("./bazy_danych/01B Po osobach - nowe.xlsx")
 
 
 
-Chapter 1 : All the nonsense with learning pytongue
+Chapter 1 : All the nonsense with learning pytongue all over again
 
