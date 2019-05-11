@@ -30,6 +30,8 @@ Linki do nauki:
 - sklearn https://s3.amazonaws.com/assets.datacamp.com/blog_assets/Scikit_Learn_Cheat_Sheet_Python.pdf
 - matplotlib https://s3.amazonaws.com/assets.datacamp.com/blog_assets/Python_Matplotlib_Cheat_Sheet.pdf
 
+- jowysz https://www.cheatography.com/weidadeyue/cheat-sheets/jupyter-notebook/pdf_bw/
+
 Chapter 1 : All the nonsense with learning pytongue all over again
 
 Przydatne funckje:
