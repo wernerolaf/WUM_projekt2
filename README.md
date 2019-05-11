@@ -8,6 +8,13 @@ siemandero
   - pandas
   - matplotlib.pyplot
 
+```{python}
+from pandas import *
+from sklearn import *
+from matplotlib.pyplot import *
+```
+
+
 - jowysz (did u get it?)
 
 
