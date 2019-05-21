@@ -1,0 +1,63 @@
+po osobach
+kolumna:
+p2_chca_zbaczyc = 0/1
+
+
+kolumny do datasetu:
+numer osoby badanej ID
+P1/ Która to Państwa wizyta w Centrum Nauki Kopernik?
+P2/ Czy mają Państwo jakiś konkretny plan dotyczący tego, co chcielibyście zobaczyć w CNK?
+ ???
+P3_7 / Dziecko, z którym jestem na wystawie jest grzeczne
+P3_8 / Dziecko, z którym jestem na wystawie jest bardzo ruchliwe
+P3_9 / Dziecko, z którym jestem na wystawie jest mało aktywne fizycznie
+P3_10 / Dziecko, z którym jestem na wystawie ma trudności z koncentracją
+P4_1  Radość
+P4_2 / Smutek
+P4_3 / Złość
+P4_4 / Zaciekawienie różnymi rzeczami/osobami
+P4_5 / Znudzenie
+P4_6 / Żwawość, duża aktywność
+P4_7 / Nadpobudliwość
+P4_8 / Spokój, zrelaksowanie
+P4_9 / Zdenerwowanie, niepokój 
+M4 / Jaka jest wielkość Pani/i miejsca zamieszkania?
+M4a / Wykształcenie
+D1 / Płeć dziecka
+D2 / Wiek dziecka
+D2_a / miesiac
+EAS_EMO
+EAS_AKTYW
+EAS_TOW
+EAS_NIESM
+R2.3 / Jak Pan(i) myśli, czy dziecko jest zadowolone z wizyty w CNK?
+R2.6_3 / Myślę, że dziecko dowiedziało się dużo w czasie zwiedzania
+R2.6_4 / Myślę, że dziecko miło spędziło czas
+D2.1 / Czy podobała Ci się wystawa?
+D2.3 / Czy nudziłeś/aś się w czasie oglądania wystawy?
+D2.6 / Czy dowiedziałeś/aś się na wystawie czegoś nowego, czego wcześniej nie wiedziałeś?
+D2.7 / Czy byłeś/aś grzeczny/a w czasie zwiedzania?
+D2.5 / Czy zmęczyłeś/aś się chodzeniem po wystawie?
+D2.10 / Czy chciał(a)byś kiedyś jeszcze raz przyjść tu do Centrum Nauki?
+D2.11_1 / Co lubisz robić najbardziej w szkole? Jakie są Twoje ulubione zajęcia / lekcje? [max dwa]
+  zmieniamy na human/przedioty ścisle/inne
+
+
+po obserwacjach - dla każdej wydzieczki robimy podsumowanie jako dla dziecka
+łączymy po ID
+D_nastroj-srednia z calej wycieczki
+D_zmęczenie-jak wyzej
+kroki_L-podsumowanie ie na dana wycieczke lacznie krokow wyszlo lub ilos krokow na minutę
+kroki_P
+D_woła
+D_pyta
+D_patrzy
+D_dotyka
+D_używa
+Czy dalej
+
+
+
+
+
+
