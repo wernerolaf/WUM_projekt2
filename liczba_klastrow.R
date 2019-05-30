@@ -37,18 +37,22 @@ osoby %>% select(Nr,
                  D2.5,
                  D2.10) -> dzieci
 
+colnames(wycieczki)[10] <- "D_zmeczenie"
+colnames(wycieczki)[21] <- "D_wola"
+colnames(wycieczki)[27] <- "D_uzywa"
+
 wycieczki %>% 
   group_by(ID) %>% 
   summarise(
     D_nastroj_srednia = mean(D_nastroj,  na.rm = TRUE),
-    D_zmeczenie_pocz = head(D_zmęczenie, 1),
-    D_zmęczenie_koniec = tail(D_zmęczenie, 1),
+    D_zmeczenie_pocz = head(D_zmeczenie, 1),
+    D_zmeczenie_koniec = tail(D_zmeczenie, 1),
     kroki_L = ifelse(max(kroki_L, na.rm = TRUE) == -Inf, max(kroki_P, na.rm = TRUE), max(kroki_L, na.rm = TRUE)),
     kroki_P = ifelse(max(kroki_P, na.rm = TRUE) == -Inf, max(kroki_L, na.rm = TRUE), max(kroki_P, na.rm = TRUE)),
-    D_woła = sum(D_woła,  na.rm = TRUE),
+    D_wola = sum(D_wola,  na.rm = TRUE),
     D_pyta = sum(D_pyta,  na.rm = TRUE),
     D_dotyka = sum(D_dotyka,  na.rm = TRUE),
-    D_używa = sum(D_używa,  na.rm = TRUE),
+    D_uzywa = sum(D_uzywa,  na.rm = TRUE),
     D_długość_wyc = max(Nastr_kiedy,  na.rm = TRUE) - min(Nastr_kiedy,  na.rm = TRUE),
     liczba_eksponatow = length(unique(`Nazwa eksponatu`)) - 1
   ) -> wycieczki_pro
@@ -82,6 +86,7 @@ cbind(dzieci,labels) %>%
   group_by(labels) %>%
   summarise_all(median)
 
+library(clusterCrit)
 
 statystyki <- function(d, pred) {
   
@@ -96,11 +101,11 @@ statystyki <- function(d, pred) {
 #dzieci[is.na(dzieci$D2_a) | is.na(dzieci$R2.6_3) | is.na(dzieci$R2.3),]
 #dzieci
 
-labels_children <- lapply(2:15, function(k) cutree(stumilowy_las[[20]], k))
+labels_children <- lapply(2:40, function(k) cutree(stumilowy_las[[20]], k))
 
 stat_labels_children <- sapply(labels_children, function(l) statystyki(dzieci[,-1],l))
 
-stat_labels_children %>% t %>% data.frame %>% cbind(k = 2:15) -> stat_labels_dzieci
+stat_labels_children %>% t %>% data.frame %>% cbind(k = 2:40) -> stat_labels_dzieci
 
 i <- intCriteria(data.matrix(dzieci[-1]), labels_children[[1]], c("Gamma", "Davies_Bouldin", "Dunn", "Silhouette"))
 
@@ -111,8 +116,6 @@ plot_missing(dzieci)
 # Plotowanie 
 
 library(ggplot2)
-
-
 
 ggplot() +
   geom_line(data = stat_labels_dzieci, aes(y = silhouette, x = k), color = 'hotpink') +
