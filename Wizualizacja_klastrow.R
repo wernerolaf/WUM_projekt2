@@ -1,4 +1,9 @@
-# Przygotowanie danych
+library(cluster)
+library(mclust)
+library(ggplot2)
+library(clues)
+library(reshape2)
+library(kableExtra)
 
 library(readxl)
 library(dplyr)
@@ -61,84 +66,56 @@ wycieczki_pro$D_długość_wyc %>% as.numeric * 60 -> wycieczki_pro$D_długość
 
 inner_join(dzieci, wycieczki_pro, by=c("Nr" = "ID")) -> ramkaPro
 
+ramkaPro$krokow_na_minute<-(ramkaPro$kroki_L+ramkaPro$kroki_P)/ramkaPro$D_długość_wyc
+
+#plot_missing(ramkaPro)
+
+#which(is.na(ramkaPro$D_zmeczenie_koniec))
+
+#zamiast ankiety pod koniec bylo jakies inne wydarzenie
+ramkaPro[51,"D_zmeczenie_koniec"]<-2
+
+
+zbior<-ramkaPro[-1]
+zbior<-scale(zbior)
 # Klasteryzacja hclust2
 
 library(genie)
 
 d <- ramkaPro[-1] %>% data.matrix()%>% scale() %>% dist
 
-forest <- lapply(seq(0.0,1, length.out = 100), FUN = function(g) {hclust2(d, tresholdGini = g)} )
+ksrednie<-lapply(2:20,function(x){srednia<-kmeans(zbior,x,nstart = 25);srednia$cluster})
 
-plot(forest[[90]])
-
-# Klasteryzacja samych dzieci
-
-d_dzieci <- dzieci[-1] %>% data.matrix()%>% scale() %>% dist
-
-stumilowy_las <- lapply(seq(0.0,0.5, length.out = 100), FUN = function(g) {hclust2(d_dzieci, tresholdGini = g)})
-
-plot(stumilowy_las[[80]])
-
-labels <- cutree(stumilowy_las[[80]], 2) 
-
-table(labels)
-cbind(dzieci,labels) %>%
-  group_by(labels) %>%
-  summarise_all(median)
-
-library(clusterCrit)
-
-statystyki <- function(d, pred) {
-  
-  i <- intCriteria(data.matrix(d), pred, c("Gamma", "Davies_Bouldin", "Dunn", "Silhouette"))
-  
-  c(silhouette = i$silhouette,
-    gamma = i$gamma,
-    davb = i$davies_bouldin,
-    dunn = i$dunn)
-}
-
-#dzieci[is.na(dzieci$D2_a) | is.na(dzieci$R2.6_3) | is.na(dzieci$R2.3),]
-#dzieci
-
-labels_children <- lapply(2:40, function(k) cutree(stumilowy_las[[20]], k))
-
-stat_labels_children <- sapply(labels_children, function(l) statystyki(dzieci[,-1],l))
-
-stat_labels_children %>% t %>% data.frame %>% cbind(k = 2:40) -> stat_labels_dzieci
-
-i <- intCriteria(data.matrix(dzieci[-1]), labels_children[[1]], c("Gamma", "Davies_Bouldin", "Dunn", "Silhouette"))
-
-library(DataExplorer)
-plot_missing(dzieci)
+clusplot(zbior, ksrednie[[1]], color=TRUE, shade=TRUE, lines=0 )
 
 
-# Plotowanie 
+i <- lapply(1:19,function(n){intCriteria(zbior, ksrednie[[n]], c("Gamma", "Davies_Bouldin", "Dunn"))})
+
+xd<-data.frame(do.call(rbind, i))
+
+xd<-cbind(xd,k=2:20)
+
+xd$gamma<-as.numeric(xd$gamma)
+xd$dunn<-as.numeric(xd$dunn)
+xd$davies_bouldin<-as.numeric(xd$davies_bouldin)
 
 library(ggplot2)
 
 ggplot() +
-  geom_line(data = stat_labels_dzieci, aes(y = silhouette, x = k), color = 'hotpink') +
-  geom_line(data = stat_labels_dzieci, aes(y = dunn, x = k), color = 'seagreen') +
-  geom_line(data = stat_labels_dzieci, aes(y = gamma, x = k), color = 'skyblue') +
-  geom_line(data = stat_labels_dzieci, aes(y = davb, x = k), color = 'salmon')
+  geom_line(data = xd, aes(y = gamma, x = k), color = 'red') +
+  geom_line(data = xd, aes(y = dunn, x = k), color = 'green') +
+  geom_line(data = xd, aes(y = davies_bouldin, x = k), color = 'blue')
+
+#sugerowana liczba klastrow to 2 oraz 5
+clusplot(zbior, ksrednie[[1]], color=TRUE, shade=TRUE, lines=0 )
+
+clusplot(zbior, ksrednie[[4]], color=TRUE, shade=TRUE, lines=0 )
 
 
+#pca
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+zbior.pca<-prcomp(zbior)
+plot(zbior.pca)
+summary(zbior.pca)
 
 
