@@ -1,3 +1,12 @@
+---
+title: "Projekt 2"
+author: "Olaf Werner"
+date: "June 3, 2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
 library(cluster)
 library(mclust)
 library(ggplot2)
@@ -86,9 +95,6 @@ d <- ramkaPro[-1] %>% data.matrix()%>% scale() %>% dist
 
 ksrednie<-lapply(2:20,function(x){srednia<-kmeans(zbior,x,nstart = 25);srednia$cluster})
 
-clusplot(zbior, ksrednie[[1]], color=TRUE, shade=TRUE, lines=0 )
-
-
 i <- lapply(1:19,function(n){intCriteria(zbior, ksrednie[[n]], c("Gamma", "Davies_Bouldin", "Dunn"))})
 
 xd<-data.frame(do.call(rbind, i))
@@ -99,17 +105,9 @@ xd$gamma<-as.numeric(xd$gamma)
 xd$dunn<-as.numeric(xd$dunn)
 xd$davies_bouldin<-as.numeric(xd$davies_bouldin)
 
-library(ggplot2)
 
-ggplot() +
-  geom_line(data = xd, aes(y = gamma, x = k), color = 'red') +
-  geom_line(data = xd, aes(y = dunn, x = k), color = 'green') +
-  geom_line(data = xd, aes(y = davies_bouldin, x = k), color = 'blue')
 
 #sugerowana liczba klastrow to 2 oraz 5
-clusplot(zbior, ksrednie[[1]], color=TRUE, shade=TRUE, lines=0,main = "" )
-
-clusplot(zbior, ksrednie[[4]], color=TRUE, shade=TRUE, lines=0 )
 
 
 #pca
@@ -124,14 +122,29 @@ p1<-rownames(head(rot[order(rot[1],decreasing = TRUE),],10))
 
 p2<-rownames(head(rot[order(rot[2],decreasing = TRUE),],10))
 
-p3<-rownames(head(rot[order(rot[3],decreasing = TRUE),],10))
 
-intersect(p3,p2)
+
+
+
+```
+
+## Co bedziamy robic wykresy
+
+```{r echo=FALSE}
+library(ggplot2)
+
+ggplot() +
+  geom_line(data = xd, aes(y = gamma, x = k), color = 'red') +
+  geom_line(data = xd, aes(y = dunn, x = k), color = 'green') +
+  geom_line(data = xd, aes(y = davies_bouldin, x = k), color = 'blue')
 
 ggplot(data = ramkaPro)+geom_smooth(aes(x=EAS_AKTYW,y=krokow_na_minute))
 
-DataExplorer::plot_correlation(ramkaPro[-c(1:12)])
 
-korelacje<-cor(ramkaPro$EAS_AKTYW,ramkaPro)
+clusplot(zbior, ksrednie[[1]], color=TRUE, shade=TRUE, lines=0,main = "" )
 
-which(korelacje==1)-1
+clusplot(zbior, ksrednie[[4]], color=TRUE, shade=TRUE, lines=0 )
+p1
+p2
+```
+
