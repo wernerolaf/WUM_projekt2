@@ -4,7 +4,7 @@ library(ggplot2)
 library(clues)
 library(reshape2)
 library(kableExtra)
-
+library(clusterCrit)
 library(readxl)
 library(dplyr)
 
@@ -107,7 +107,7 @@ ggplot() +
   geom_line(data = xd, aes(y = davies_bouldin, x = k), color = 'blue')
 
 #sugerowana liczba klastrow to 2 oraz 5
-clusplot(zbior, ksrednie[[1]], color=TRUE, shade=TRUE, lines=0 )
+clusplot(zbior, ksrednie[[1]], color=TRUE, shade=TRUE, lines=0,main = "" )
 
 clusplot(zbior, ksrednie[[4]], color=TRUE, shade=TRUE, lines=0 )
 
@@ -117,5 +117,15 @@ clusplot(zbior, ksrednie[[4]], color=TRUE, shade=TRUE, lines=0 )
 zbior.pca<-prcomp(zbior)
 plot(zbior.pca)
 summary(zbior.pca)
+rot<-zbior.pca$rotation
+rot<-data.frame(abs(rot))
+
+p1<-rownames(head(rot[order(rot[1],decreasing = TRUE),],10))
+
+p2<-rownames(head(rot[order(rot[2],decreasing = TRUE),],10))
+
+p3<-rownames(head(rot[order(rot[3],decreasing = TRUE),],10))
+
+intersect(p3,p2)
 
 
