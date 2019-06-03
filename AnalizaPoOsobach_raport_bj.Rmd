@@ -1,0 +1,104 @@
+---
+title: Raport AnalizyPoOsobach
+author: Bogdan Jastrzębski
+date: "3 czerwca 2019 - "
+output: 
+  html_document:
+    toc: true
+    number_sections: true
+    toc_float: true
+    theme: "paper"
+---
+
+# Wstęp 
+
+Niniejsza praca opisuje analizę unsupervised ramki "Po Osobach" w podziale na podzbiory. 
+
+# Motywacja
+
+Dane w naszej ramce są logicznie podzielone. Część kolumn dotyczy np. tylko odpowiedzi dzieci, inne dotyczą odpowiedzi dorosłych w ankiecie, inne znowu dotyczą danych demograficznych itd. Analiza pewnego zbioru ma odpowiedzieć nam na pytanie, jakie są zależności 
+między kolumnami tych grup.
+
+Zaproponowaliśmy uproszczoną analizę, która ma wykazywać związki między całymi grupami.
+
+# Schemat testu
+
+Test polega na:
+
+- podzieleniu zbioru na podzbiory kolumn
+- znalezieniu klas
+- sprawdzeniu za pomocą testu $\chi^2$, czy dane klasy są ze sobą powiązane
+
+# Podzbiory
+
+Oto nasze podzbiory:
+
+(Asia Asia, tu lecą Twoje teksty)
+
+# Znalezienie klas
+
+Do klasteryzacji wykorzystaliśmy algorytm hclust2. Oto drzewa dla naszych podzbiorów:
+
+(Asia Asia, tu lecą Twoje wykresy)
+```{r, echo=FALSE}
+library(gridExtra)
+# Tutaj wstawiamy grid 2x3 naszych drzew
+grid.arrange(p1,p2,p3,p4,p5,p6,nrow=2) # p1... to nasze ploty
+```
+
+Na podstawie tych drzew dokonaliśmy podziału zbioru. 
+
+# Test $\chi^2$ w skrócie
+
+Zakładamy, że nasze dwie zmienne kategoryczne są niezależne ($h_0$). Naszą hipotezą alternatywną jest to, że zmienne nie są niezależne ($h_1$). Przykładowo mamy:
+
+
+|       | A | B | Total |
+|-------|---|---|-------|
+| 1     | 10 | 20 | 30    |
+| 2     | 90 | 70 | 160   |
+| Total | 100 | 90 | 190   |
+
+Jeżeli zmienne są niezależne, to można ustalić na podstawie rozkładów brzegowych rokład ogólny.
+Np. w A1 powinno być: 
+
+$$\frac{30\cdot100}{190} \approx 15.789$$
+
+To jest nasza wartość oczekiwana. 
+Teraz dla każdej komórki obliczamy:
+
+$$\frac{(observed - expected)^2}{expected}$$
+
+a następnie sumujemy i ta suma jest naszą statystyką testową. $h_0$ zakłada, że statystyka ta ma dążyć do $0$.
+Teraz po schemacie liczymy p-value etc. i odrzucamy hipotezę alternatywną, albo nie.
+
+Będziemy znajdować takie pary etykiet, dla których statystyka jest duża, a p-value jest małe.
+
+# Efekty testu $\chi^2$
+
+```{r, echo=FALSE}
+load("ChisqTestMatrix.rda")
+library(lattice)
+library(gridExtra)
+Chisq_n <- Chisq
+diag(Chisq_n) <- 0
+p1 <- levelplot(Chisq_n)
+p2 <- levelplot(Chisq_p)
+grid.arrange(p1,p2,nrow=1)
+```
+
+Interpretacja:
+
+Jak widać dla pewnych podzbiorów osiągamy dużą wartość statystyki dla małych p, mianowicie dla:
+
+- R i P
+- EASr i EASrest
+
+(Asia Asia, tu interpretujesz dlaczego potencjalnie jest związek między EASr, a EASrest i R, a P)
+
+R oznacza...
+P ozancza... 
+No to jest oczywiste, że będą powiązane. albo: No to jest zaskakujące.
+
+(koniec Asi)
+

@@ -7,7 +7,6 @@ P <- osoby %>% select(
   P1,
   P1.1,
   P2,
-  P3_7,
   P3_1,
   P3_2,
   P3_3,
@@ -173,7 +172,6 @@ R_tree <- hclust2(dist(scale(data.matrix(R))), thresholdGini = 0.1)
 # Plots
 library(ggplot2)
 library(dendextend)
-as.ggdend(P_tree)
 
 plot(P_tree)
 plot(M_tree)
@@ -331,6 +329,22 @@ for(n in names(table_list)) {
 Chisq
 Chisq_p
 
+# colnames(Chisq) <- c("R","EASr", "EASrest", "D", "M", "P") %>% rev
+# rownames(Chisq) <- colnames(Chisq)
+# 
+# colnames(Chisq_p) <- colnames(Chisq)
+# rownames(Chisq_p) <- colnames(Chisq)
+# 
+
+# save(Chisq, Chisq_p, file="ChisqTestMatrix.rda")
+
+levelplot(Chisq)
+
 # Znalezione związki!!! P z R i EASr z EASrest
+
+heatmap(matrix(1:4, nrow = 2, ncol=2))
+heatmap(Chisq)
+
+
 
 
