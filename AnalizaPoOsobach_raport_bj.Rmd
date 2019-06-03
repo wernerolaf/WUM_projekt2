@@ -33,18 +33,35 @@ Test polega na:
 
 Oto nasze podzbiory:
 
-(Asia Asia, tu lecą Twoje teksty)
+###Dataset P
+* odpowiedzi na pytania skierowane do opiekunów, odnośnie ich oczekiwań co do wystawy i tego jak dziecko się zachowywało podczas zwiedzania.
+
+###Dataset M
+* dane dotyczące opiekuna, wiek, miejsce zamieszkania, wykształcenie, płeć.
+
+###Dataset D
+* dane dotyczące dziecka, wiek, płeć, relacja opiekun-dziecko
+
+###Dataset EAS_r 
+* charakterystyka cech temperamentu
+
+###Dataset Eas_rest
+* opisują emocjonalnosć , towarzyskość, aktywność, nieśmiałość dziecka
+
+###Dataset R
+* pytania skierowane do opiekuna odnośnie wrażeń po wystawie, o tym jak dziecko się zachowywało podczas zwiedzania, uwagi
+
+
+
 
 # Znalezienie klas
 
 Do klasteryzacji wykorzystaliśmy algorytm hclust2. Oto drzewa dla naszych podzbiorów:
 
-(Asia Asia, tu lecą Twoje wykresy)
-```{r, echo=FALSE}
-library(gridExtra)
-# Tutaj wstawiamy grid 2x3 naszych drzew
-grid.arrange(p1,p2,p3,p4,p5,p6,nrow=2) # p1... to nasze ploty
+```{r, echo=FALSE, out.width = "500px", out.height= "360px"}
+knitr::include_graphics("all_trees.png")
 ```
+
 
 Na podstawie tych drzew dokonaliśmy podziału zbioru. 
 
@@ -94,11 +111,29 @@ Jak widać dla pewnych podzbiorów osiągamy dużą wartość statystyki dla ma�
 - R i P
 - EASr i EASrest
 
-(Asia Asia, tu interpretujesz dlaczego potencjalnie jest związek między EASr, a EASrest i R, a P)
 
-R oznacza...
-P ozancza... 
-No to jest oczywiste, że będą powiązane. albo: No to jest zaskakujące.
+**R i P**
 
-(koniec Asi)
+Duże powiązanie zmiennych R i P jest oczywiste. Wynika to z tego, iż w pierwszym jak i w drugim zbiorze mamy do czynienia z odpowiedziami opiekunów na pytania związane z :
+
+- ich oczekiwaniami odnośnie wystawy
+
+- zachowaniem dzieci podczas zwiedzania
+
+- wrażeniami po wystawie
+
+Różnica między zbiorami :
+
+- dla zbioru  P odpowedzi były zbierane przed i w trakcie wycieczki
+
+- zbiór R był stworzony na podstawie pytań po zakoczeniu wizyty
+
+
+
+**EASr i EASrest**
+
+Oba datasety dotyczą charakterystyki cech temperamentu, tyle, że są przedstawione w nieco inny sposób. Zatem powiązanie między nimi jest naturalne.
+
+
+
 
