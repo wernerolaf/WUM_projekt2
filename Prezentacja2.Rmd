@@ -121,30 +121,47 @@ rot<-data.frame(abs(rot))
 p1<-rownames(head(rot[order(rot[1],decreasing = TRUE),],10))
 
 p2<-rownames(head(rot[order(rot[2],decreasing = TRUE),],10))
-
-
-
-
-
 ```
 
-## Co bedziamy robic wykresy
+## Co zrobiliśmy
+Chcielismy badac dzieci więc z zbioru danych wybralismy dane bezposrednio o dzieciach i polaczylismy je ze soba w ten sposob otrzymalismy dane o kazdym z dziecku na temat tego jak zachowywalo sie na wycieczce i jakie mialo testy psychologiczne. Jedna z metod ktra uzilismy do grupowania dzieci bylo metoda k srednich
 
 ```{r echo=FALSE}
 library(ggplot2)
 
 ggplot() +
-  geom_line(data = xd, aes(y = gamma, x = k), color = 'red') +
-  geom_line(data = xd, aes(y = dunn, x = k), color = 'green') +
-  geom_line(data = xd, aes(y = davies_bouldin, x = k), color = 'blue')
+  geom_line(data = xd, aes(y = gamma, x = k, color = 'gamma')) +
+  geom_line(data = xd, aes(y = dunn, x = k, color = 'dunn')) +
+  geom_line(data = xd, aes(y = davies_bouldin, x = k, color = 'davies_bouldin'))+labs(y="")+
+  scale_color_manual(name = "Colors", values = c("davies_bouldin" = "blue", "gamma" = "red","dunn"="green"))
 
-ggplot(data = ramkaPro)+geom_smooth(aes(x=EAS_AKTYW,y=krokow_na_minute))
 
+```
+Jak widzimy z wykresu najbardziej sensowna liczba na klasteryzacje okazala sie 20 ale z powodu tego ze nasz zbior liczy tylko 69 dzieci to wzielismy 2 dla metody k srednich
 
+```{r}
 clusplot(zbior, ksrednie[[1]], color=TRUE, shade=TRUE, lines=0,main = "" )
 
-clusplot(zbior, ksrednie[[4]], color=TRUE, shade=TRUE, lines=0 )
+```
+
+Mimo wyjasniania tylko 24 procent wariancji to nawet na oko zbiory sa latwo rozdzielane
+
+
+##czym sa komponenty?
+uzylismy PCA i na podstawie macierzy rotacji zindentyfikowalismy najwazniejsze zmienne wchodzace w sklad kazdego z dwoch pierwszych wektorow
+
+```{r}
 p1
 p2
 ```
+
+Po zapoznaniu sie z legenda pierwszy wektor dotyczy psychiki dziecka, a drugi jego aktywnosci
+
+```{r}
+ggplot(data = ramkaPro)+geom_smooth(aes(x=EAS_AKTYW,y=krokow_na_minute))
+```
+
+jest tendencja wzrostowa ale z powodu malej ilosci danych i mozliwych bledow w krokomierzach jest duzo niepewnosc
+
+
 

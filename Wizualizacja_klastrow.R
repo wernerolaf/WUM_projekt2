@@ -135,3 +135,11 @@ DataExplorer::plot_correlation(ramkaPro[-c(1:12)])
 korelacje<-cor(ramkaPro$EAS_AKTYW,ramkaPro)
 
 which(korelacje==1)-1
+
+
+ggplot() +
+  geom_line(data = xd, aes(y = gamma, x = k, color = 'gamma')) +
+  geom_line(data = xd, aes(y = dunn, x = k, color = 'dunn')) +
+  geom_line(data = xd, aes(y = davies_bouldin, x = k, color = 'davies_bouldin'))+labs(y="")+
+  scale_color_manual(name = "Colors", values = c("davies_bouldin" = "blue", "gamma" = "red","dunn"="green"))
+
