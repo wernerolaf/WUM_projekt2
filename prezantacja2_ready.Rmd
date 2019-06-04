@@ -34,22 +34,22 @@ Test polega na:
 Oto nasze podzbiory:
 
 ##Dataset P
-* odpowiedzi na pytania skierowane do opiekunów, odnośnie ich oczekiwań co do wystawy i tego jak dziecko się zachowywało podczas zwiedzania.
+ odpowiedzi na pytania skierowane do opiekunów, odnośnie ich oczekiwań co do wystawy i tego jak dziecko się zachowywało podczas zwiedzania.
 
 ##Dataset M
-* dane dotyczące opiekuna, wiek, miejsce zamieszkania, wykształcenie, płeć.
+ dane dotyczące opiekuna, wiek, miejsce zamieszkania, wykształcenie, płeć.
 
 ##Dataset D
-* dane dotyczące dziecka, wiek, płeć, relacja opiekun-dziecko
+ dane dotyczące dziecka, wiek, płeć, relacja opiekun-dziecko
 
 ##Dataset EAS_r 
-* charakterystyka cech temperamentu
+ charakterystyka cech temperamentu
 
 ##Dataset Eas_rest
-* opisują emocjonalnosć , towarzyskość, aktywność, nieśmiałość dziecka
+ opisują emocjonalnosć , towarzyskość, aktywność, nieśmiałość dziecka
 
 ##Dataset R
-* pytania skierowane do opiekuna odnośnie wrażeń po wystawie, o tym jak dziecko się zachowywało podczas zwiedzania, uwagi
+ pytania skierowane do opiekuna odnośnie wrażeń po wystawie, o tym jak dziecko się zachowywało podczas zwiedzania, uwagi
 
 
 
