@@ -270,7 +270,7 @@ ggplot() +
 ```
 Jak widzimy z wykresu najbardziej sensowna liczba na klasteryzacje okazala sie 20 ale z powodu tego ze nasz zbior liczy tylko 69 dzieci to wzielismy 2 dla metody k srednich
 
-```{r}
+```{r echo=FALSE}
 clusplot(zbior, ksrednie[[1]], color=TRUE, shade=TRUE, lines=0,main = "" )
 
 ```
@@ -288,7 +288,7 @@ p2
 
 Po zapoznaniu sie z legenda pierwszy wektor dotyczy psychiki dziecka, a drugi jego aktywnosci
 
-```{r}
+```{r echo=FALSE, warning=FALSE}
 ggplot(data = ramkaPro)+geom_smooth(aes(x=EAS_AKTYW,y=krokow_na_minute))
 ```
 
