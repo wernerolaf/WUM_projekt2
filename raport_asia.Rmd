@@ -1,0 +1,177 @@
+---
+title: "projekt2"
+author: "Joanna Gajewska"
+date: "11 June 2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r}
+
+library(cluster)
+library(clusterCrit)
+attach(mtcars)
+library(mlr)
+library(factoextra)
+library(FactoMineR)
+library(dplyr)
+
+
+rm(list=ls())
+
+
+dzieci<-read.csv(file="dzieci_olaf.csv")
+data<-scale(dzieci)
+
+
+```
+Sprawdzamy jaka ilość klastrow jest najlepsza 
+k-means
+```{r}
+# m. sylwetki
+fviz_nbclust(data, kmeans, method = "silhouette")
+
+# m. łkocia
+
+fviz_nbclust(data, kmeans, method = "wss") +
+geom_vline(xintercept = 3, linetype = 2)
+
+#m. gap statistics
+gap_stat <- clusGap(data, FUN = kmeans, K.max = 10, B = 10)
+fviz_gap_stat(gap_stat)
+
+```
+ Hierarchical Clustering
+```{r}
+# m .sylwetki
+fviz_nbclust(data, hcut, method = "silhouette")
+
+# m. łkocia
+
+fviz_nbclust(data, hcut, method = "wss") +
+geom_vline(xintercept = 3, linetype = 2)
+
+# m. gap statistics
+gap_stat <- clusGap(data, FUN = hcut, K.max = 10, B = 10)
+fviz_gap_stat(gap_stat)
+
+
+```
+
+
+
+PCA- troche zabawy z pca, nie wiem czy warto to gdzies wrzucac ...
+```{r}
+
+data.pca <- PCA(data, graph = FALSE)
+
+
+fviz_pca_var(data.pca, col.var="contrib",
+             gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"),
+             repel = TRUE # Avoid text overlapping
+             )
+
+
+fviz_pca_ind(data.pca, col.ind = "cos2",
+             gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"),
+             repel = TRUE # Avoid text overlapping (slow if many points)
+             )
+
+
+
+
+```
+
+ponownie sprwdzam najoptymalniejsza liczbe klastrow korzystając z indeksów Dunna, Xie Beni, Daviesa Bouldini dla metody k-means i pam
+```{r}
+
+
+
+cluster_kmeans<-lapply(2:6, function(k) kmeans(data, k))
+cluster_pam<-lapply(2:6, function(k) pam(data, k))
+
+
+
+indeks_in_kmeans<-sapply(1:5, function(i) intCriteria(as.matrix(data), cluster_kmeans[[i]]$cluster, c("Dunn", "Xie_Beni", "Davies_Bouldin")))
+
+
+plot(2:6, unlist(indeks_in_kmeans[1,]), xlab = "k", ylab="indeks Dunna - max wybieramy", col ="green", pch =19)
+title("Metoda kmeans")
+plot(2:6, unlist(indeks_in_kmeans[2,]), xlab = "k", ylab="indeks Xie Beni - min wybieramy  ", col ="red", pch =19)
+title("Metoda kmeans")
+plot(2:6, unlist(indeks_in_kmeans[3,]), xlab = "k", ylab="indeks Davies'a Bouldini - min wybieramy", col ="orange", pch =19)
+title("Metoda kmeans")
+
+
+indeks_in_pam<-sapply(1:5, function(i) intCriteria(as.matrix(data), cluster_pam[[i]]$cluster, c("Dunn", "Xie_Beni", "Davies_Bouldin")))
+
+
+
+plot(2:6, unlist(indeks_in_pam[1,]), xlab = "k", ylab="indeks Dunna -max", col ="green", pch =19)
+title("Metoda PAM")
+plot(2:6, unlist(indeks_in_pam[2,]), xlab = "k", ylab="indeks Xie Beni -min", col ="red", pch =19)
+title("Metoda PAM")
+plot(2:6, unlist(indeks_in_pam[3,]), xlab = "k", ylab="indeks Davies'a Bouldini - min", col ="orange", pch =19)
+title("Metoda PAM")
+```
+najlepsze wyniki dla 2 grup
+teraz  sprawdzam jak wygladają poszczegolne klastry 
+
+```{r}
+
+
+kmenas_2<-kmeans(data, 2)
+kmeans_3<-kmeans(data, 3)
+pam_2<-pam(data, 2)
+pam_3<-pam(data, 3)
+hclust_2<- hcut(data, k = 2, hc_method = "complete")
+hclust_3<- hcut(data, k = 3, hc_method = "complete")
+
+fviz_cluster(kmenas_2, data = data,
+             palette = c("#2E9FDF", "#E7B800", "#FC4E07"),
+             ggtheme = theme_minimal(),
+             main = "Partitioning Clustering Plot - kmeans 2"
+             )
+
+fviz_cluster(kmeans_3, data = data,
+             palette = c("#2E9FDF", "#E7B800", "#FC4E07"),
+             ggtheme = theme_minimal(),
+             main = "Partitioning Clustering Plot - kmeans 3"
+             )
+
+fviz_cluster(pam_2, data = data,
+             palette = c("#2E9FDF", "#E7B800", "#FC4E07"),
+             ggtheme = theme_minimal(),
+             main = "Partitioning Clustering Plot - PAM 2"
+             )
+
+fviz_cluster(pam_3, data = data,
+             palette = c("#2E9FDF", "#E7B800", "#FC4E07"),
+             ggtheme = theme_minimal(),
+             main = "Partitioning Clustering Plot - PAM 3"
+             )
+
+# Hierarchical Clustering
+
+fviz_cluster(hclust_2, data = data,
+             palette = c("#2E9FDF", "#E7B800", "#FC4E07"),
+             ggtheme = theme_minimal(),
+             main = "Partitioning Clustering Plot - PAM"
+             )
+
+fviz_cluster(hclust_3, data = data,
+             palette = c("#2E9FDF", "#E7B800", "#FC4E07"),
+             ggtheme = theme_minimal(),
+             main = "Partitioning Clustering Plot - PAM"
+             )
+
+
+
+
+
+```
+Dla metody k-means z podzialem na dwa klastry najczytelniejszy wynik
