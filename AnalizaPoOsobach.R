@@ -338,13 +338,11 @@ Chisq_p
 
 # save(Chisq, Chisq_p, file="ChisqTestMatrix.rda")
 
-levelplot(Chisq)
+par(mfrow=c(2,3))
+plot(1:3)
+
 
 # Znalezione związki!!! P z R i EASr z EASrest
 
 heatmap(matrix(1:4, nrow = 2, ncol=2))
 heatmap(Chisq)
-
-
-
-
