@@ -299,6 +299,7 @@ library(kableExtra)
 library(clusterCrit)
 library(readxl)
 library(dplyr)
+library(gridExtra)
 wycieczki <- read_xlsx("bazy_danych/01A Obserwacje_nowe.xlsx")
 osoby <- read_xlsx("bazy_danych/01B Po osobach - nowe.xlsx")
 osoby %>% select(Nr,
@@ -453,67 +454,62 @@ Powyższe metody będziemy wykonywać dla metod klasteryzacji :
 
 * metoda hierarchiczna
 
-## a) 
-### k-średnich
+**K-means:** 
 
-```{r, echo = FALSE}
+```{r, echo = FALSE, fig.height=2}
 # m. sylwetki
 set.seed(123)
 
-fviz_nbclust(data, kmeans, method = "silhouette")
-fviz_nbclust(data, kmeans , method = "wss") +
+f1c <- fviz_nbclust(data, kmeans, method = "silhouette")
+f2c <- fviz_nbclust(data, kmeans , method = "wss") +
 geom_vline(xintercept = 3, linetype = 2)
 
 gap_stat <- clusGap(data, FUN = kmeans, K.max = 10, B = 10)
-fviz_gap_stat(gap_stat)
+f3c <- fviz_gap_stat(gap_stat)
 
-
-
-
+grid.arrange(f1c,f2c,f3c,nrow=1)
 ```
 
-### PAM
+**PAM:**
 
-```{r, echo = FALSE}
+```{r, echo = FALSE, fig.height=2}
 # m .sylwetki
-fviz_nbclust(data, pam, method = "silhouette")
+f1c <- fviz_nbclust(data, pam, method = "silhouette")
 
 # m. łkocia
 
-fviz_nbclust(data, pam, method = "wss") +
+f2c <- fviz_nbclust(data, pam, method = "wss") +
 geom_vline(xintercept = 3, linetype = 2)
 
 # m. gap statistics
 gap_stat <- clusGap(data, FUN = pam, K.max = 10, B = 10)
-fviz_gap_stat(gap_stat)
+f3c <- fviz_gap_stat(gap_stat)
 
-
+grid.arrange(f1c,f2c,f3c,nrow=1)
 ```
 
+**hclust:**
 
-### Metody hierarchiczne
-```{r, echo = FALSE}
+```{r, echo = FALSE, fig.height=2}
 # m .sylwetki
-fviz_nbclust(data, hcut, method = "silhouette")
+f1c <- fviz_nbclust(data, hcut, method = "silhouette")
 
 # m. łkocia
 
-fviz_nbclust(data, hcut, method = "wss") +
+f2c <- fviz_nbclust(data, hcut, method = "wss") +
 geom_vline(xintercept = 3, linetype = 2)
 
 # m. gap statistics
 gap_stat <- clusGap(data, FUN = hcut, K.max = 10, B = 10)
-fviz_gap_stat(gap_stat)
+f3c <- fviz_gap_stat(gap_stat)
 
-
+grid.arrange(f1c,f2c,f3c,nrow=1)
 ```
 
 Analizując powyższe wykresy rzuca się w oczy, że dla wszystkich metod gap statistis daje podzaił rowny 1. Widać, że dla naszego przypadku ta metoda nie jest odpowiednia. Dla metody łokcia mamy prawie identyczne wykresy. Można wywnioskować, że jest to dosyć "płytka" metoda, nie wyłapująca subtelności wynikających z różnych sposobów klasteryzacji.
 Tak więc metoda sylwetki wydaje się być najrozsądniejsza dla naszego zbioru. Wskazuje ona dla k-średnich oraz dla metod hierarchicznych podział na 2 klasy, dla PAM są to 3 zbiory.
 
-
-## b)
-```{r, echo = FALSE}
+```{r, echo = FALSE, fig.height=3}
 
 
 
@@ -533,31 +529,55 @@ indeks_in_hclust<-sapply(1:5, function(i) intCriteria(as.matrix(data), cluster_h
 dunn<-data.frame(kmeans=unlist(indeks_in_kmeans[1,]), pam = unlist(indeks_in_pam[1,]), hclust=unlist(indeks_in_hclust[1,]) , 
                  k= 2:6)
 
-ggplot(dunn, aes( k, y=indeks_Dunna, color = Metoda )) +
+i1 <- ggplot(dunn, aes( k, y=indeks_Dunna, color = Metoda )) +
+    geom_line(aes(y = kmeans, col = "kmeans"))+
+    geom_line(aes(y = pam, col = "pam")) + 
+    geom_line(aes(y = hclust, col = "hclust"))+
     geom_point(aes(y = kmeans, col = "kmeans"))+
     geom_point(aes(y = pam, col = "pam")) + 
     geom_point(aes(y = hclust, col = "hclust"))+
-  ylab("indeks Dunna'a")
+  ylab("indeks Dunna'a") +
+  ggtitle("indeks Dunna'a") +
+  theme_minimal() + theme(legend.position = "none")
 
   
-xie_beni<-data.frame(kmeans=unlist(indeks_in_kmeans[2,]), pam = unlist(indeks_in_pam[2,]), hclust=unlist(indeks_in_hclust[2,]) , k= 2:6)
+xie_beni <- data.frame(kmeans=unlist(indeks_in_kmeans[2,]), pam = unlist(indeks_in_pam[2,]), hclust=unlist(indeks_in_hclust[2,]) , k= 2:6)
 
-ggplot(xie_beni, aes( k, y=indeks_Xie_Beni, color = Metoda )) +
+i2 <- ggplot(xie_beni, aes( k, y=indeks_Xie_Beni, color = Metoda )) +
+    geom_line(aes(y = kmeans, col = "kmeans"))+
+    geom_line(aes(y = pam, col = "pam")) + 
+    geom_line(aes(y = hclust, col = "hclust"))+
     geom_point(aes(y = kmeans, col = "kmeans"))+
     geom_point(aes(y = pam, col = "pam")) + 
     geom_point(aes(y = hclust, col = "hclust"))+
-  ylab("indeks Xie Beni")
+  ylab("indeks Xie Beni") +
+  ggtitle("indeks Xie Beni") +
+  theme_minimal() + theme(legend.position = "none")
+  
 
 
-davies_bouldin<-data.frame(kmeans=unlist(indeks_in_kmeans[3,]), pam = unlist(indeks_in_pam[3,]), hclust=unlist(indeks_in_hclust[3,]) , k= 2:6)
+davies_bouldin <- data.frame(kmeans=unlist(indeks_in_kmeans[3,]), pam = unlist(indeks_in_pam[3,]), hclust=unlist(indeks_in_hclust[3,]) , k= 2:6)
 
-ggplot(xie_beni, aes( k, y=indeks_Davies_Bouldin, color = Metoda )) +
+i3 <- ggplot(xie_beni, aes( k, y=indeks_Davies_Bouldin, color = Metoda)) +
+    geom_line(aes(y = kmeans, col = "kmeans"))+
+    geom_line(aes(y = pam, col = "pam")) + 
+    geom_line(aes(y = hclust, col = "hclust"))+
     geom_point(aes(y = kmeans, col = "kmeans"))+
     geom_point(aes(y = pam, col = "pam")) + 
     geom_point(aes(y = hclust, col = "hclust"))+
-  ylab("indeks Davies'a Bouldin'a")
+  ylab("indeks Davies'a Bouldin'a") +
+  ggtitle("indeks Davies'a Bouldin'a") +
+  theme_minimal()
 
+g_legend<-function(a.gplot){
+  tmp <- ggplot_gtable(ggplot_build(a.gplot))
+  leg <- which(sapply(tmp$grobs, function(x) x$name) == "guide-box")
+  legend <- tmp$grobs[[leg]]
+  return(legend)}
 
+mylegend<-g_legend(i3)
+
+grid.arrange(i1,i2,i3 + theme(legend.position = "none"),mylegend,nrow=1)
 
 
 
@@ -570,9 +590,9 @@ Aby zinterpretować powyższe wykresy należy widzieć jak odczytywać wyniki dl
 Z analizy otrzymanych wyników z metody sylwetki oraz indeksów, w wiekszości przypadków były wskazania na podział na 2 lub 3 grupy. Tak więc wykreślimy klastry dla tej liczby podziałów z osobna dla każdej z metod klasteryzacji.
  
 
-### k-means
+**k-means**
 
-```{r, echo = FALSE}
+```{r, echo = FALSE, fig.height=3}
 kmenas_2<-kmeans(data, 2)
 kmeans_3<-kmeans(data, 3)
 pam_2<-pam(data, 2)
@@ -580,57 +600,55 @@ pam_3<-pam(data, 3)
 hclust_2<- hcut(data, k = 2, hc_method = "complete")
 hclust_3<- hcut(data, k = 3, hc_method = "complete")
 
-fviz_cluster(kmenas_2, data = data,
+fc1 <- fviz_cluster(kmenas_2, data = data,
              palette = c("#2E9FDF", "#E7B800", "#FC4E07"),
              ggtheme = theme_minimal(),
              main = "Partitioning Clustering Plot - kmeans 2"
              )
 
-fviz_cluster(kmeans_3, data = data,
+fc2 <- fviz_cluster(kmeans_3, data = data,
              palette = c("#2E9FDF", "#E7B800", "#FC4E07"),
              ggtheme = theme_minimal(),
              main = "Partitioning Clustering Plot - kmeans 3"
              )
+gridExtra::grid.arrange(fc1, fc2, nrow=1)
 ```
 
-### PAM
+**PAM**
 
-```{r echo = FALSE}
-fviz_cluster(pam_2, data = data,
+```{r echo = FALSE, fig.height=3}
+fc1 <- fviz_cluster(pam_2, data = data,
              palette = c("#2E9FDF", "#E7B800", "#FC4E07"),
              ggtheme = theme_minimal(),
              main = "Partitioning Clustering Plot - PAM 2"
              )
 
-fviz_cluster(pam_3, data = data,
+fc2 <- fviz_cluster(pam_3, data = data,
              palette = c("#2E9FDF", "#E7B800", "#FC4E07"),
              ggtheme = theme_minimal(),
              main = "Partitioning Clustering Plot - PAM 3"
              )
+gridExtra::grid.arrange(fc1, fc2, nrow=1)
 ```
 
-### Metoady hierarchiczne
+**Metoady hierarchiczne**
 
-```{r echo = FALSE, message=FALSE}
-fviz_cluster(hclust_2, data = data,
+```{r echo = FALSE, message=FALSE, fig.height=3}
+fc1 <- fviz_cluster(hclust_2, data = data,
              palette = c("#2E9FDF", "#E7B800", "#FC4E07"),
              ggtheme = theme_minimal(),
              main = "Partitioning Clustering Plot - hcluster"
              )
 
-fviz_cluster(hclust_3, data = data,
+fc2 <- fviz_cluster(hclust_3, data = data,
              palette = c("#2E9FDF", "#E7B800", "#FC4E07"),
              ggtheme = theme_minimal(),
              main = "Partitioning Clustering Plot - hcluster"
              )
+gridExtra::grid.arrange(fc1, fc2, nrow=1)
 
 ```
 
-
-
-
-
-## Podsumowanie 
 
 Analizując otrzymane wyniki z wykresów oraz z wizualizacji klastrów, należy podjąć decyzje, według jakiej metody i jakiego podziału będziemy klasyfikować nasz zbiór. Najbardziej odpowiednim wariantem zdaje się być metoda k -średnich dla podziału na 2 grupy. 
 
