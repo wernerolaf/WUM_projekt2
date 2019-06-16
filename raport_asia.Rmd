@@ -506,7 +506,7 @@ f3c <- fviz_gap_stat(gap_stat)
 grid.arrange(f1c,f2c,f3c,nrow=1)
 ```
 
-Analizując powyższe wykresy rzuca się w oczy, że dla wszystkich metod gap statistis daje podzaił rowny 1. Widać, że dla naszego przypadku ta metoda nie jest odpowiednia. Dla metody łokcia mamy prawie identyczne wykresy. Można wywnioskować, że jest to dosyć "płytka" metoda, nie wyłapująca subtelności wynikających z różnych sposobów klasteryzacji.
+Analizując powyższe wykresy rzuca się w oczy, że dla wszystkich metod gap statistis daje podział rowny 1. Widać, że dla naszego przypadku ta metoda nie jest odpowiednia. Dla metody łokcia mamy prawie identyczne wykresy. Można wywnioskować, że jest to dosyć "płytka" metoda, nie wyłapująca subtelności wynikających z różnych sposobów klasteryzacji.
 Tak więc metoda sylwetki wydaje się być najrozsądniejsza dla naszego zbioru. Wskazuje ona dla k-średnich oraz dla metod hierarchicznych podział na 2 klasy, dla PAM są to 3 zbiory.
 
 ```{r, echo = FALSE, fig.height=3}
@@ -583,7 +583,7 @@ grid.arrange(i1,i2,i3 + theme(legend.position = "none"),mylegend,nrow=1)
 
 ```
 
-Aby zinterpretować powyższe wykresy należy widzieć jak odczytywać wyniki dla danych indeksów. Dla indeksu Dunn'a szukamy maksymalnej wartości, w przypadku Xie Beni  i Davies'a Bouldin'a jest to minimum. Niestety nie widać na nich żadnych zależności. Dla każdej z metod w trzech przyadkach jest różny wskazywany optymalny podział. 
+Aby zinterpretować powyższe wykresy należy widzieć jak odczytywać wyniki dla danych indeksów. Dla indeksu Dunn'a szukamy maksymalnej wartości, w przypadku Xie Beni  i Davies'a Bouldin'a jest to minimum. Niestety nie widać na nich żadnych zależności. Dla każdej z metod w trzech przypadkach jest różny wskazywany optymalny podział. 
 
 ## Wizualizacja klastrów
 
@@ -681,4 +681,10 @@ kmenas_2$centers
 
 
 Analizując wykres PCA oraz zmeinną "centers" metody kmeans() można zauważyć, że cechy weglug których głównie odbywał się podział to te z przedrostkiem "P4". Są to atrybute odpowiadające pytaniom odnoszącym się do zachowania dziecka na wystawie (radosne, smutne, złe, zaciekawione, znudzone, ruchliwe, skoncentrowane, zrelaksowane).
+
+
+##Podsumowanie
+Przetestowaliśmy wiele różnych podejść i mimo że wartości indeksów nie wychodziły najlepsze to  dało się wizualnie oddzielić klasy od siebie. Ponadto wykazaliśmy zależności między psychiką dziecka, a zachowaniem na wycieczce oraz między zachowaniem dzieci, a tym co mówią o nich rodzice. Możliwe, że gdybyśmy mieli więcej wycieczek do analizy (mieliśmy tylko 69 opisanych wycieczek) to nasze statystyki byłyby bardziej pewne.
+
+
 
