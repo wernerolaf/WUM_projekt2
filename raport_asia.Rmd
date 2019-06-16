@@ -398,7 +398,7 @@ ggplot() +
 
 Jak widzimy, najbardziej sensowną liczbą klastrów okazała się liczba 20, ale z powodu tego, że nasz zbior liczy tylko 69 dzieci, to wzielismy 2 dla metody k-średnich.
 
-```{r echo=FALSE, message=FALSE}
+```{r echo=FALSE, message=FALSE, warning=FALSE}
 clusplot(zbior, ksrednie[[1]], color=TRUE, shade=TRUE, lines=0,main = "") +
   theme_minimal()
 ```
@@ -416,7 +416,7 @@ p2
 
 Po zapoznaniu sie z legendą, pierwszy wektor dotyczy psychiki dziecka, a drugi jego aktywnosci.
 
-```{r echo=FALSE, warning=FALSE}
+```{r echo=FALSE, warning=FALSE, message=FALSE}
 ggplot(data = ramkaPro)+geom_smooth(aes(x=EAS_AKTYW,y=krokow_na_minute)) +
   theme_minimal()
 ```
@@ -674,17 +674,14 @@ fviz_pca_var(data.pca, col.var="contrib",
 
 ```{r}
 kmenas_2$centers
-
-
 ```
 
 
 
-Analizując wykres PCA oraz zmeinną "centers" metody kmeans() można zauważyć, że cechy weglug których głównie odbywał się podział to te z przedrostkiem "P4". Są to atrybute odpowiadające pytaniom odnoszącym się do zachowania dziecka na wystawie (radosne, smutne, złe, zaciekawione, znudzone, ruchliwe, skoncentrowane, zrelaksowane).
+Analizując wykres PCA oraz zmeinną "centers" metody kmeans() można zauważyć, że cechy weglug których głównie odbywał się podział to te z przedrostkiem "P4". Są to atrybuty odpowiadające pytaniom, odnoszącym się do zachowania dziecka na wystawie (radosne, smutne, złe, zaciekawione, znudzone, ruchliwe, skoncentrowane, zrelaksowane).
 
 
-##Podsumowanie
-Przetestowaliśmy wiele różnych podejść i mimo że wartości indeksów nie wychodziły najlepsze to  dało się wizualnie oddzielić klasy od siebie. Ponadto wykazaliśmy zależności między psychiką dziecka, a zachowaniem na wycieczce oraz między zachowaniem dzieci, a tym co mówią o nich rodzice. Możliwe, że gdybyśmy mieli więcej wycieczek do analizy (mieliśmy tylko 69 opisanych wycieczek) to nasze statystyki byłyby bardziej pewne.
+# Podsumowanie
 
-
+Przetestowaliśmy wiele różnych podejść i mimo że mieliśmy w zbiorze danych tylko 69 obserwacji, udało się znaleźć klastry obserwatorów. Ponadto wykazaliśmy zależności między psychiką dziecka, a zachowaniem na wycieczce oraz między zachowaniem dzieci, a tym co mówią o nich rodzice. Możliwe, że gdybyśmy mieli więcej wycieczek do analizy, to nasze statystyki byłyby bardziej pewne.
 
